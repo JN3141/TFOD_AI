@@ -8,7 +8,22 @@
 
 void decideDraculaMove(DracView gameState)
 {
-	// TODO ...
-	// Replace the line below by something better
-	registerBestPlay("CD","Mwuhahahaha");
+
+	//Initialise variables
+	LocationID bestPlay = CASTLE_DRACULA;
+	int teleported = FALSE;
+
+	//Initialise map
+	GameView gameView = newGameView(NUM_MAP_LOCATIONS);
+	addRoadConnections(gameView);
+
+	int trail[TRAIL_SIZE];
+	giveMeTheTrail(gameState, PLAYER_DRACULAR, trail);
+
+	if (teleportInTrail(trail) == FALSE && giveMeTheRound(gameState) > 0) {
+		registerBestPlay("CD","Mwuhahahaha");
+		teleported = TRUE;
+	} //else{...}
+
+	
 }
