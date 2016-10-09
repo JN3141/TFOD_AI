@@ -117,6 +117,7 @@ typedef int LocationID;
 #define NOWHERE                 UNKNOWN_LOCATION
 
 
+
 // given a Place number, return its name
 char *idToName(int place);
 
@@ -128,6 +129,8 @@ int nameToID(char *name);
 
 // given a Place abbreviation, return its ID number
 int abbrevToID(char *abbrev);
+
+char* idToAbbrev(LocationID);
 
 #define isLand(place)  (idToType(place) == LAND)
 #define isSea(place)  (idToType(place) == SEA)
