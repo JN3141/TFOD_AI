@@ -47,6 +47,7 @@ int locationPossible(LocationID *myTrail, LocationID nextLocation) {
 			return FALSE;
 		}
 	}
+    
     return TRUE;
 }
 
