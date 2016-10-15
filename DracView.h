@@ -1,6 +1,5 @@
-// DracView.h
-// Official Interface for DracViewADT
-// COMP1927 14s2
+// DracView.h ... Interface for DracViewADT
+// COMP1927 16s2 ... supplied code
 
 #ifndef DRAC_VIEW_H
 #define DRAC_VIEW_H

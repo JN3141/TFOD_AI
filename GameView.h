@@ -1,6 +1,5 @@
-// GameView.h
-// Official Interface for GameViewADT
-// COMP1927 14s2
+// GameView.h ... Interface for GameViewADT
+// COMP1927 15s2 ... basic GameView (supplied code)
 
 #ifndef GAME_VIEW_H
 #define GAME_VIEW_H
@@ -78,6 +77,11 @@ int getHealth(GameView currentView, PlayerID player);
 //   LOCATION_UNKNOWN if the round number is 0
 
 LocationID getLocation(GameView currentView, PlayerID player);
+
+// Get information about traps/vampires at a specified location
+// (Extra function not in original interface)
+
+void getMinions(GameView game, LocationID where, int *numTraps, int *numVamps);
 
 
 //// Functions that return information about the history of the game
