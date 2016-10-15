@@ -13,15 +13,16 @@ typedef struct edge{
     TransportID type;
 } Edge;
 
-// graph representation is hidden 
-typedef struct MapRep *Map; 
+// graph representation is hidden
+typedef struct MapRep *Map;
 
-// operations on graphs 
-Map  newMap();  
-void disposeMap(Map g); 
-void showMap(Map g); 
+// operations on graphs
+Map  newMap();
+void disposeMap(Map g);
+void showMap(Map g);
 int  numV(Map g);
 int  numE(Map g, TransportID t);
 LocationID *reachableLocations(Map map, int *numLocations, LocationID from, int drac, int railLength, int road, int sea);
+int findDist(Map m, LocationID src, LocationID dest);
 
 #endif

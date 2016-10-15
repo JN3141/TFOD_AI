@@ -27,6 +27,12 @@ struct MapRep {
 static void addConnections(Map);
 static void includeReachableByRail(Map map, int *reachable, LocationID from, int railLength);
 
+int main(int argc, char * argv[]) {
+    Map m = newMap();
+    printf("the distance between them is %d", findDist(m,37,37));
+    return EXIT_SUCCESS;
+}
+
 // Create a new empty graph (for a map)
 // #Vertices always same as NUM_PLACES
 Map newMap()
