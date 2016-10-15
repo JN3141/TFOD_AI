@@ -28,13 +28,13 @@ void decideDraculaMove(DracView gameState)
 		teleported = TRUE;
 	} //else{...}
 	*/
-	
+
 	//last minute need to do something
 	int numLocations;
 	LocationID *next = whereCanIgo(gameState, &numLocations, TRUE, FALSE);
 	srand(time(NULL));
 	int r = rand();
-	
+
 	registerBestPlay(idToAbbrev(next[r%numLocations]),"Mwuhahahaha");
-	
+
 }
