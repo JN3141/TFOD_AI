@@ -10,6 +10,7 @@ void decideHunterMove(HunterView gameState)
 {
     // TODO ...
     // Replace the line below by something better
+<<<<<<< HEAD
 	if (giveMeTheRound(gameState) == 0){
 		if(whoAmI(gameState)== PLAYER_LORD_GODALMING){
 			registerBestPlay("GA","");
@@ -70,3 +71,7 @@ void decideHunterMove(HunterView gameState)
    
 }
 
+=======
+    registerBestPlay("GE","I'm on holiday in Geneva");
+}
+>>>>>>> parent of 249bbb3... default files
