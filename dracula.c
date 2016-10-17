@@ -15,6 +15,7 @@
 // THE STRAT IS TO JUST KEEP AS MUCH DISTANCE AS POSSIBLE FROM OTHER
 // HUNTERS
 
+int locationPossible(LocationID *myTrail, LocationID nextLocation);
 int hidePossible(LocationID *fakeTrail, LocationID currentLocation);
 int doubleBackPossible(LocationID *fakeTrail);
 
@@ -56,6 +57,7 @@ void decideDraculaMove(DracView gameState) {
 
     int furthest = UNKNOWN_LOCATION;
     int backup = UNKNOWN_LOCATION;
+
     int godalming[NUM_MAP_LOCATIONS];
     for (i = 0; i <= MAX_MAP_LOCATION; i++) {
         godalming[i] = findDist(europe, godalmingLoc, i);
@@ -106,47 +108,53 @@ void decideDraculaMove(DracView gameState) {
             printf("%s\n",idToAbbrev(possible[i]));
         }
 
-        printf("the numLocations value is %d\n", numLocations);
+        //printf("the numLocations value is %d\n", numLocations);
 
         // move along the array and decide which one has the greatest
         // distance total from every other hunter
-        for (i = 0; i < numLocations; i++) {
-            if (sums[possible[i]] > sums[furthest] ||
-                furthest == UNKNOWN_LOCATION         ) {
-                furthest = possible[i];
+        if (numLocations == 1) {
+            furthest = possible[0];
+        } else {
+            for (i = 0; i < numLocations; i++) {
+                if (sums[possible[i]] > sums[furthest] ||
+                    furthest == UNKNOWN_LOCATION         ) {
+                    furthest = possible[i];
+                }
             }
 
-            if (backup == UNKNOWN_LOCATION &&
-                possible[i] != furthest) {
-                backup = possible[i];
-                printf("backup is %d\n", backup);
+            for (i = 0; i < numLocations; i++) {
+                if ((sums[possible[i]] > sums[backup] ||
+                    backup == UNKNOWN_LOCATION) &&
+                    possible[i] != furthest) {
+                    backup = possible[i];
+                }
             }
-
         }
 
         printf("drac was at %s\n", idToAbbrev(dracLoc));
         printf("dracTrail[0] is %s\n", idToAbbrev(dracTrail[0]));
         printf("furthest is %s\n", idToAbbrev(furthest));
+        printf("backup is %d\n", backup);
 
-        if (dracTrail[0] == furthest) { // needs to be a DB1 or a HI
+        if (dracTrail[0] == furthest &&
+            locationPossible(dracTrail,furthest) &&
+            (hidePossible(fakeTrail, dracLoc) ||
+             doubleBackPossible(fakeTrail))) { // needs to be a DB1 or a HI
             printf("did a thing\n");
             if (hidePossible(fakeTrail, dracLoc)) {
                 printf("dracTrail[0] is %d\n", dracTrail[0]);
                 printf("furthest is %d\n", furthest);
                 registerBestPlay("HI","");
-            } else if (backup != UNKNOWN_LOCATION) {
-                printf("dracTrail[0] is %d\n", dracTrail[0]);
-                printf("furthest is %d\n", furthest);
-                printf("could not hide, so restoring to backup %d\n", backup);
-                registerBestPlay(idToAbbrev(backup),"");
             } else if (doubleBackPossible(fakeTrail)) {
                 printf("i went here\n");
                 registerBestPlay("D1","");
             }
-        } else if (furthest != UNKNOWN_LOCATION) { // just go to furthest
+        } else if (furthest != UNKNOWN_LOCATION &&
+                   locationPossible(dracTrail,furthest)) { // just go to furthest
             printf("just did furthest lmao\n");
             registerBestPlay(idToAbbrev(furthest),"");
-        } else if (backup != UNKNOWN_LOCATION) { // go to the backup
+        } else if (backup != UNKNOWN_LOCATION &&
+                   locationPossible(dracTrail,backup)) { // go to the backup
             printf("running on the backup\n");
             registerBestPlay(idToAbbrev(backup),"");
         } else if (doubleBackPossible(fakeTrail)) { // no choices i want? can I DB?
@@ -177,7 +185,7 @@ void decideDraculaMove(DracView gameState) {
 int locationPossible(LocationID *myTrail, LocationID nextLocation) {
 	int i;
 
-	for (i=0; i < TRAIL_SIZE - 1; i++){
+	for (i = 0; i < TRAIL_SIZE - 1; i++){
 		if (myTrail[i] == nextLocation){
 			return FALSE;
 		}
