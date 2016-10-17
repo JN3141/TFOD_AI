@@ -91,7 +91,7 @@ void decideDraculaMove(DracView gameState) {
             }
         }
 
-        //printf("the idToAbbrev output is %s",idToAbbrev(furthest));
+        printf("the idToAbbrev output is %s",idToAbbrev(furthest));
 
         registerBestPlay(idToAbbrev(furthest),"");
 
@@ -107,6 +107,7 @@ void decideDraculaMove(DracView gameState) {
         }
 
         printf("the numLocations value is %d\n", numLocations);
+
         // move along the array and decide which one has the greatest
         // distance total from every other hunter
         for (i = 0; i < numLocations; i++) {
@@ -139,16 +140,29 @@ void decideDraculaMove(DracView gameState) {
                 printf("could not hide, so restoring to backup %d\n", backup);
                 registerBestPlay(idToAbbrev(backup),"");
             } else if (doubleBackPossible(fakeTrail)) {
+                printf("i went here\n");
                 registerBestPlay("D1","");
             }
-        } else if (dracLoc == DUBLIN && numLocations == 1) {
-            registerBestPlay("AO","THERE IS NO CONNECTION TO AO BUT "
-                              "A-OKAY");
-        } else {
+        } else if (furthest != UNKNOWN_LOCATION) {
             printf("just did furthest lmao\n");
             registerBestPlay(idToAbbrev(furthest),"");
+        } else if (doubleBackPossible(fakeTrail)) {
+            if (dracTrail[4] != UNKNOWN_LOCATION &&
+                findDist(europe,dracTrail[4],dracLoc) == 1) {
+                registerBestPlay("D5","");
+            } else if (dracTrail[3] != UNKNOWN_LOCATION &&
+                       findDist(europe,dracTrail[3],dracLoc) == 1) {
+                registerBestPlay("D4","");
+            } else if (dracTrail[2] != UNKNOWN_LOCATION &&
+                       findDist(europe,dracTrail[2],dracLoc) == 1) {
+                registerBestPlay("D3","");
+            } else if (dracTrail[1] != UNKNOWN_LOCATION &&
+                       findDist(europe,dracTrail[1],dracLoc) == 1) {
+                registerBestPlay("D2","");
+            }
+        } else if (numLocations == 0) {
+            registerBestPlay("TP","");
         }
-
     }
 }
 
