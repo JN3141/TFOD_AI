@@ -139,16 +139,12 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                 }
                 // Trap placed
                 if (matches(pastPlays, "D--T---|D---T--", index)) {
-                    i = 0;
-                    int trap_placed = 0;
-                    while (trap_placed != TRUE) {
-                        assert( i < MAX_TRAPS );
-                        if ( view->cities[resolvedMove].trap[i] == NO_ITEM ) {
-                            view->cities[resolvedMove].trap[i] = turn;
-                            trap_placed = TRUE;
-                        }
-                        i++;
-                    }
+					for (i = 0; i < MAX_TRAPS; i++) {
+						if (view->cities[resolvedMove].trap[i] == NO_ITEM) {
+							view->cities[resolvedMove].trap[i] = turn;
+							break;
+						}
+					}
                 }
             }
 

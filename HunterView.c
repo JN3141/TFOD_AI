@@ -101,7 +101,7 @@ LocationID *whereCanTheyGo(HunterView currentView, int *numLocations,
 	                       numLocations,
 		                   getLocation(currentView->game, player),
 		                   player,
-		                   getRound(currentView->game)+1,
+		                   getRound(currentView->game),
 		                   road, rail, sea);
 
     if (player == PLAYER_DRACULA) forbidden = ST_JOSEPH_AND_ST_MARYS;

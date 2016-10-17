@@ -84,10 +84,7 @@ static int inVList(VList L, LocationID v, TransportID type)
 LocationID *reachableLocations(Map map, int *numLocations, LocationID from, int drac, int railLength, int road, int sea)
 {
     //a boolean for each location, if it is reachable
-    int *reachable = malloc(NUM_MAP_LOCATIONS * sizeof (int));
-    int i;
-    for (i = 0; i < NUM_MAP_LOCATIONS; i++)
-        reachable[i] = 0;
+    int *reachable = calloc(NUM_MAP_LOCATIONS,sizeof (int));
 
     //setting the 'from' location as reachable
     reachable[from] = 1;
@@ -108,7 +105,7 @@ LocationID *reachableLocations(Map map, int *numLocations, LocationID from, int 
 
     //going through and putting every reachable LocationID into an array
     LocationID *locations = malloc(NUM_MAP_LOCATIONS * sizeof (LocationID));
-    int index = 0;
+    int i, index = 0;
     for (i = 0; i < NUM_MAP_LOCATIONS; i++) {
         //don't allow dracula to go to the hospital
         if (reachable[i]) {
@@ -199,6 +196,10 @@ int numE(Map g, TransportID type)
 }
 
 int findDist(Map m, LocationID src, LocationID dest) {
+
+    if (dest == UNKNOWN_LOCATION) {
+        return 0;
+    }
 
     // holds the connections between places
     LocationID hops[NUM_MAP_LOCATIONS];
