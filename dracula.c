@@ -185,8 +185,8 @@ void decideDraculaMove(DracView gameState) {
 int locationPossible(LocationID *myTrail, LocationID nextLocation) {
 	int i;
 
-	for (i = 0; i < TRAIL_SIZE - 1; i++){
-		if (myTrail[i] == nextLocation){
+	for (i = 0; i < TRAIL_SIZE - 1; i++) {
+		if (myTrail[i] == nextLocation) {
 			return FALSE;
 		}
 	}
