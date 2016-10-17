@@ -128,7 +128,7 @@ void decideDraculaMove(DracView gameState) {
         printf("dracTrail[0] is %s\n", idToAbbrev(dracTrail[0]));
         printf("furthest is %s\n", idToAbbrev(furthest));
 
-        if (dracTrail[0] == furthest) {
+        if (dracTrail[0] == furthest) { // needs to be a DB1 or a HI
             printf("did a thing\n");
             if (hidePossible(fakeTrail, dracLoc)) {
                 printf("dracTrail[0] is %d\n", dracTrail[0]);
@@ -143,10 +143,13 @@ void decideDraculaMove(DracView gameState) {
                 printf("i went here\n");
                 registerBestPlay("D1","");
             }
-        } else if (furthest != UNKNOWN_LOCATION) {
+        } else if (furthest != UNKNOWN_LOCATION) { // just go to furthest
             printf("just did furthest lmao\n");
             registerBestPlay(idToAbbrev(furthest),"");
-        } else if (doubleBackPossible(fakeTrail)) {
+        } else if (backup != UNKNOWN_LOCATION) { // go to the backup
+            printf("running on the backup\n");
+            registerBestPlay(idToAbbrev(backup),"");
+        } else if (doubleBackPossible(fakeTrail)) { // no choices i want? can I DB?
             if (dracTrail[4] != UNKNOWN_LOCATION &&
                 findDist(europe,dracTrail[4],dracLoc) == 1) {
                 registerBestPlay("D5","");
@@ -160,8 +163,13 @@ void decideDraculaMove(DracView gameState) {
                        findDist(europe,dracTrail[1],dracLoc) == 1) {
                 registerBestPlay("D2","");
             }
-        } else if (numLocations == 0) {
+        } else if (numLocations == 0) { // so i can't DB, HI, go to backup, so that means i can only tele right?
             registerBestPlay("TP","");
+        } else { // missed a case?
+            //last minute need to do something
+	        srand(time(NULL));
+	        int r = rand();
+	        registerBestPlay(idToAbbrev(possible[r%numLocations]),"");
         }
     }
 }
@@ -191,17 +199,7 @@ int hidePossible(LocationID *fakeTrail, LocationID currentLocation) {
 	}
 
 	int i;
-
-    /*
-    for (i = 1; i < TRAIL_SIZE; i++) { // can't have a hide in trail
-        printf ("%d\n",myTrail[i]);
-        if (myTrail[i] == myTrail[i-1]) {
-            printf("I'm giving a false\n");
-            return FALSE;
-        }
-    }*/
-
-    for (i = 0; i < TRAIL_SIZE; i++) { // can't have a hide in trail
+    for (i = 0; i < TRAIL_SIZE - 1; i++) { // can't have a hide in trail
         printf ("%d\n",fakeTrail[i]);
         if (fakeTrail[i] == HIDE) {
             printf("I'm giving a false\n");
@@ -224,101 +222,3 @@ int doubleBackPossible(LocationID *fakeTrail) {
 	}
     return TRUE;
 }
-
-
-
-
-/*
-THIS IS THE OLD VERSION
-void decideDraculaMove(DracView gameState) {
-
-    // collecting info...
-    // grabbing hunter locations...
-    LocationID godalmingLoc = whereIs(gameState, PLAYER_LORD_GODALMING);
-    LocationID sewardLoc = whereIs(gameState, PLAYER_DR_SEWARD);
-    LocationID helsingLoc = whereIs(gameState, PLAYER_VAN_HELSING);
-    LocationID harkerLoc = whereIs(gameState, PLAYER_MINA_HARKER);
-
-    // gettng basic data...
-    int round = giveMeTheRound(gameState);
-    // int hp = howHealthyIs(gameState, PLAYER_DRACULA);
-    Map europe = newMap();
-
-    // set up all the arrays for keeping track of distances between
-    // each hunter and the possible locations
-    int i;
-    int furthest = 0;
-    int godalming[NUM_MAP_LOCATIONS];
-    for (i = 0; i <= MAX_MAP_LOCATION; i++) {
-        godalming[i] = findDist(europe, godalmingLoc, i);
-    }
-
-    int seward[NUM_MAP_LOCATIONS];
-    for (i = 0; i <= MAX_MAP_LOCATION; i++) {
-        seward[i] = findDist(europe, sewardLoc, i);
-    }
-
-    int helsing[NUM_MAP_LOCATIONS];
-    for (i = 0; i <= MAX_MAP_LOCATION; i++) {
-        helsing[i] = findDist(europe, helsingLoc, i);
-    }
-
-    int harker[NUM_MAP_LOCATIONS];
-    for (i = 0; i <= MAX_MAP_LOCATION; i++) {
-        harker[i] = findDist(europe, harkerLoc, i);
-    }
-
-    // sums the distances to each place for every hunter
-    int sums[NUM_MAP_LOCATIONS];
-    for (i = 0; i <= MAX_MAP_LOCATION; i++) {
-        sums[i] = godalming[i] + seward[i] + helsing[i] + harker[i];
-    }
-
-
-
-    if (round == 0) {
-        // just find the place furthest from everyone and stick dracula
-        // there
-        for (i = 0; i <= MAX_MAP_LOCATION; i++) {
-            if (sums[i] > sums[furthest]) {
-                furthest = i;
-            }
-        }
-
-        registerBestPlay(idToAbbrev(furthest),"");
-
-    } else {
-        // keep the greatest distance possible as per usual
-        int numLocations;
-        LocationID *possible = whereCanIgo(gameState, &numLocations,
-                                                TRUE, FALSE);
-        for (i = 0; i < numLocations; i++) {
-            if (sums[possible[i]] > sums[furthest]) {
-                furthest = possible[i];
-            }
-        }
-        registerBestPlay(idToAbbrev(furthest),"");
-    }
-    registerBestPlay("CD","Mwuhahahaha");
-
-	//Initialise variables
-	LocationID bestPlay = CASTLE_DRACULA;
-	int teleported = FALSE;
-
-	int trail[TRAIL_SIZE];
-	giveMeTheTrail(gameState, PLAYER_DRACULA, trail);
-
-	if (teleportInTrail(trail) == FALSE && giveMeTheRound(gameState) > 0) {
-		registerBestPlay("CD","Mwuhahahaha");
-		teleported = TRUE;
-	} //else{...}
-
-	// last minute need to do something
-	int numLocations;
-	LocationID *next = whereCanIgo(gameState, &numLocations, TRUE, FALSE);
-	srand(time(NULL));
-	int r = rand();
-
-	registerBestPlay(idToAbbrev(next[r%numLocations]),"Mwuhahahaha");
-}
-*/
