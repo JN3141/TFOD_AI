@@ -40,6 +40,11 @@ void decideDraculaMove(DracView gameState) {
         printf("%d\n",fakeTrail[i]);
     }
 
+    printf("dracTrail includes:\n");
+    for (i = 0; i < TRAIL_SIZE; i++) {
+        printf("%d\n",dracTrail[i]);
+    }
+
     // gettng basic data...
     int round = giveMeTheRound(gameState);
     LocationID dracLoc = whereIs(gameState, PLAYER_DRACULA);
@@ -136,6 +141,9 @@ void decideDraculaMove(DracView gameState) {
             } else if (doubleBackPossible(fakeTrail)) {
                 registerBestPlay("D1","");
             }
+        } else if (dracLoc == DUBLIN && numLocations == 1) {
+            registerBestPlay("AO","THERE IS NO CONNECTION TO AO BUT "
+                              "A-OKAY");
         } else {
             printf("just did furthest lmao\n");
             registerBestPlay(idToAbbrev(furthest),"");
