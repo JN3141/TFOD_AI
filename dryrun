@@ -1,0 +1,3 @@
+#!/bin/sh
+
+1927 dryrun ass2b Makefile dracula.c hunter.c GameView.c GameView.h DracView.c DracView.h HunterView.c HunterView.h Map.c Map.h Queue.c Queue.h Places.c Places.h
